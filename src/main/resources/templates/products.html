@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Products</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+</head>
+<body>
+<header class="navbar">
+    <nav>
+        <a th:href="@{/products}">Products</a> |
+        <a th:href="@{/cart}">Cart</a> |
+        <a th:href="@{/orders}">Orders</a> |
+        <a th:href="@{/admin/products}">Admin products</a>
+    </nav>
+</header>
+
+<main class="container">
+    <h1>Products</h1>
+
+    <!-- Filter / search form -->
+    <form method="get" th:action="@{/products}" class="filter-bar">
+        <label>
+            Category:
+            <select name="categoryId">
+                <option value="">All</option>
+                <option th:each="cat : ${categories}"
+                        th:value="${cat.id}"
+                        th:text="${cat.name}"
+                        th:selected="${selectedCategoryId != null} ? ${cat.id} == ${selectedCategoryId} : false">
+                </option>
+            </select>
+        </label>
+
+        <label>
+            Search:
+            <input type="text"
+                   name="search"
+                   placeholder="Name, SKU..."
+                   th:value="${search}">
+        </label>
+
+        <button type="submit">Apply</button>
+        <a th:href="@{/products}">Clear</a>
+    </form>
+
+    <!-- Products grid -->
+    <div class="product-grid">
+        <div class="product-card" th:each="product : ${products}">
+
+            <img class="product-image"
+                 th:src="${#strings.isEmpty(product.imageUrl) ? '/images/default-product.jpg' : product.imageUrl}"
+                 alt="Product image">
+
+<!--            &lt;!&ndash; Product image (real image if exists) &ndash;&gt;-->
+<!--            <img th:if="${product.imageUrl != null and !#strings.isEmpty(product.imageUrl)}"-->
+<!--                 th:src="${product.imageUrl}"-->
+<!--                 alt="Product image"-->
+<!--                 class="product-image"/>-->
+
+<!--            &lt;!&ndash; Fallback image &ndash;&gt;-->
+<!--            <img th:if="${product.imageUrl == null or #strings.isEmpty(product.imageUrl)}"-->
+<!--                 th:src="@{/images/default-product.jpg}"-->
+<!--                 alt="Default product image"-->
+<!--                 class="product-image"/>-->
+
+            <div class="product-info">
+
+                <h2 th:text="${product.name}">Product name</h2>
+
+                <p>
+                    <span th:text="${product.category != null ? product.category.name : 'Uncategorized'}">Category</span>
+                    ·
+                    SKU:
+                    <span th:text="${product.sku}">SKU</span>
+                </p>
+
+                <p>
+                    Price:
+                    <span th:text="${#numbers.formatDecimal(product.price, 1, '2', 'POINT')}">0.00</span>
+                </p>
+
+                <p>
+                    In stock:
+                    <span th:text="${product.stock}">0</span>
+                </p>
+
+                <div class="product-actions">
+                    <a th:href="@{'/products/' + ${product.id}}">View details</a>
+
+                    <form th:action="@{'/cart/add/' + ${product.id}}" method="post" style="display:inline;">
+                        <button type="submit">Add to cart</button>
+                    </form>
+                </div>
+
+            </div>
+        </div>
+
+        <p th:if="${#lists.isEmpty(products)}">No products found.</p>
+    </div>
+</main>
+</body>
+</html>

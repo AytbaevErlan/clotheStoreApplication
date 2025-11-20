@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Checkout</title>
+    <style>
+        body {
+            background: #0f1a2b;
+            color: #fff;
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        h1, h2 {
+            color: #87cefa;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            padding: 10px;
+            border-bottom: 1px solid #334;
+            text-align: left;
+        }
+        a {
+            color: #87cefa;
+        }
+        button {
+            padding: 10px 20px;
+            border-radius: 4px;
+            border: 1px solid #555;
+            background: #1b2740;
+            color: #fff;
+            cursor: pointer;
+            font-size: 1rem;
+        }
+        .summary {
+            margin-top: 20px;
+            font-size: 1.1rem;
+        }
+        .actions {
+            margin-top: 30px;
+        }
+        .top-links {
+            margin-bottom: 10px;
+        }
+        .flash-message {
+            margin-top: 10px;
+            color: #7CFC00;
+        }
+    </style>
+</head>
+<body>
+
+<div class="top-links">
+    <a href="/products">Products</a> |
+    <a href="/cart">Cart</a> |
+    <a href="/orders">Orders</a>
+</div>
+
+<h1>Checkout</h1>
+
+<p th:if="${message}" class="flash-message" th:text="${message}"></p>
+
+<div th:if="${cart == null or cart.items == null or #lists.isEmpty(cart.items)}">
+    <p>Your cart is empty.</p>
+    <p><a href="/cart">← Back to cart</a></p>
+</div>
+
+<div th:if="${cart != null and !#lists.isEmpty(cart.items)}">
+
+    <h2>Order summary</h2>
+
+    <table>
+        <tr>
+            <th>Product</th>
+            <th>Quantity</th>
+            <th>Unit price</th>
+            <th>Line total</th>
+        </tr>
+
+        <tr th:each="item : ${cart.items}">
+            <td th:text="${item.productName}"></td>
+            <td th:text="${item.quantity}"></td>
+            <td th:text="${item.unitPrice}"></td>
+            <td th:text="${item.lineTotal}"></td>
+        </tr>
+    </table>
+
+    <div class="summary">
+        <p><strong>Total:</strong> <span th:text="${cart.total}"></span></p>
+    </div>
+
+    <div class="actions">
+        <form th:action="@{/checkout}" method="post">
+            <button type="submit">Place order</button>
+        </form>
+
+        <p style="margin-top: 10px;">
+            <a href="/cart">← Back to cart</a>
+        </p>
+    </div>
+</div>
+
+</body>
+</html>

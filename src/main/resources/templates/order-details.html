@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Order Details</title>
+
+    <style>
+        body {
+            background: #0f1a2b;
+            color: #fff;
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            padding: 10px;
+            border-bottom: 1px solid #334;
+            text-align: left;
+        }
+        h1, h2 {
+            color: #87cefa;
+        }
+        a {
+            color: #87cefa;
+        }
+        .status-form {
+            margin-top: 10px;
+            margin-bottom: 20px;
+        }
+        select, button {
+            padding: 6px 10px;
+            border-radius: 4px;
+            border: 1px solid #555;
+            background: #1b2740;
+            color: #fff;
+        }
+        button {
+            cursor: pointer;
+        }
+        .flash-message {
+            margin-top: 10px;
+            color: #7CFC00;
+        }
+    </style>
+</head>
+<body>
+
+<h1>Order #<span th:text="${order.id}"></span></h1>
+
+<p><strong>Date:</strong> <span th:text="${order.createdAt}"></span></p>
+<p><strong>Status:</strong> <span th:text="${order.status}"></span></p>
+<p><strong>Total:</strong> <span th:text="${order.total}"></span></p>
+
+<!-- Flash message (if any) -->
+<p th:if="${message}" class="flash-message" th:text="${message}"></p>
+
+<!-- Status update form -->
+<div class="status-form">
+    <form th:action="@{'/orders/' + ${order.id} + '/status'}" method="post">
+        <label for="statusSelect"><strong>Change status:</strong></label>
+        <select id="statusSelect" name="status">
+            <option th:each="s : ${T(com.school.storeapplication.domain.order.OrderStatus).values()}"
+                    th:value="${s}"
+                    th:text="${s}"
+                    th:selected="${s} == ${order.status}">
+            </option>
+        </select>
+        <button type="submit">Update</button>
+    </form>
+</div>
+
+<h2>Items</h2>
+
+<table>
+    <tr>
+        <th>Product</th>
+        <th>Quantity</th>
+        <th>Unit Price</th>
+        <th>Line Total</th>
+    </tr>
+
+    <tr th:each="item : ${order.items}">
+        <td th:text="${item.product.name}"></td>
+        <td th:text="${item.quantity}"></td>
+        <td th:text="${item.unitPrice}"></td>
+        <td th:text="${item.lineTotal}"></td>
+    </tr>
+</table>
+
+<br>
+
+<a href="/orders">← Back to orders</a>
+
+</body>
+</html>

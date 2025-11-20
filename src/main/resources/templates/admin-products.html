@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin - Products</title>
+    <style>
+        body {
+            background: #0f1a2b;
+            color: #fff;
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        h1 {
+            color: #ffdd57;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            padding: 10px;
+            border-bottom: 1px solid #334;
+            text-align: left;
+        }
+        a {
+            color: #87cefa;
+        }
+        .top-links {
+            margin-bottom: 10px;
+        }
+        .flash-message {
+            margin-top: 10px;
+            color: #7CFC00;
+        }
+        button {
+            padding: 4px 10px;
+            border-radius: 4px;
+            border: 1px solid #555;
+            background: #1b2740;
+            color: #fff;
+            cursor: pointer;
+        }
+        .danger {
+            border-color: #ff4d4f;
+            color: #ffaaaa;
+        }
+    </style>
+</head>
+<body>
+
+<div class="top-links">
+    <a href="/products">Products</a> |
+    <a href="/admin/orders">Admin orders</a>
+</div>
+
+<h1>Admin: Products</h1>
+
+<p th:if="${message}" class="flash-message" th:text="${message}"></p>
+
+<p>
+    <a href="/admin/products/new">+ Create new product</a>
+</p>
+
+<table th:if="${products != null and !#lists.isEmpty(products)}">
+    <tr>
+        <th>ID</th>
+        <th>Name</th>
+        <th>Category</th>
+        <th>Price</th>
+        <th>Stock</th>
+        <th>Active</th>
+        <th></th>
+    </tr>
+    <tr th:each="p : ${products}">
+        <td th:text="${p.id}"></td>
+        <td th:text="${p.name}"></td>
+        <td th:text="${p.category != null ? p.category.name : '—'}"></td>
+        <td th:text="${p.price}"></td>
+        <td th:text="${p.stock}"></td>
+        <td th:text="${p.active}"></td>
+        <td>
+            <a th:href="@{'/admin/products/' + ${p.id} + '/edit'}">Edit</a>
+            &nbsp;|&nbsp;
+            <form th:action="@{'/admin/products/' + ${p.id} + '/delete'}"
+                  method="post"
+                  style="display:inline"
+                  onsubmit="return confirm('Delete this product?');">
+                <button type="submit" class="danger">Delete</button>
+            </form>
+        </td>
+    </tr>
+</table>
+
+<div th:if="${products == null or #lists.isEmpty(products)}">
+    <p>No products found.</p>
+</div>
+
+<p><a href="/products">← Back to store</a></p>
+
+</body>
+</html>

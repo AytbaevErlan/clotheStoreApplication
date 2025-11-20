@@ -1,0 +1,32 @@
+<!-- src/main/resources/templates/product.html -->
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="${product.name}">Product</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+</head>
+<body>
+
+<a th:href="@{/}">Store</a> |
+<a th:href="@{/products}">Back to products</a>
+
+<h1 th:text="${product.name}">Product name</h1>
+
+<p th:text="${product.description}">Description</p>
+
+<p>
+    Category:
+    <span th:text="${product.category.name}">Category</span>
+</p>
+
+<p>
+    <strong th:text="${product.price}">0.00</strong> PLN
+</p>
+
+<p>
+    <a th:href="@{|/cart/add/${product.id}|}">Add to cart</a>
+</p>
+
+</body>
+</html>

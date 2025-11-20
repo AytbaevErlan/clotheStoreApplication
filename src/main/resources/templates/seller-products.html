@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head><title>Seller – Products</title></head>
+<body>
+<div th:replace="layout :: nav"></div>
+
+<section>
+    <h1>Seller – Products</h1>
+
+    <p><a th:href="@{/seller/products/new}">Create new product</a></p>
+
+    <div th:if="${#lists.isEmpty(products)}">No products.</div>
+
+    <div th:each="p : ${products}">
+        <article>
+            <h3 th:text="${p.name}">Name</h3>
+            <p th:text="${p.description}">Description</p>
+            <p>Category: <span th:text="${p.category.name}">Category</span></p>
+            <p>Price: <span th:text="${p.price}">0.00</span> PLN</p>
+            <p>Stock: <span th:text="${p.stock}">0</span></p>
+            <form th:action="@{'/seller/products/' + ${p.id} + '/delete'}" method="post">
+                <button type="submit">Deactivate</button>
+            </form>
+        </article>
+        <hr/>
+    </div>
+</section>
+</body>
+</html>

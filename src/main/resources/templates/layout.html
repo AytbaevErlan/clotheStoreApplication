@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" />
+    <title th:text="${pageTitle} ?: 'Store Application'">Store Application</title>
+
+    <link rel="stylesheet" th:href="@{/css/styles.css}" />
+</head>
+<body>
+
+<!-- Simple navigation bar fragment -->
+<header th:fragment="nav">
+    <nav class="navbar">
+        <a th:href="@{/}" class="nav-brand">Store</a>
+        <ul class="nav-links">
+            <li><a th:href="@{/products}">Products</a></li>
+            <li><a th:href="@{/cart}">Cart</a></li>
+            <li><a th:href="@{/login}">Login</a></li>
+            <li><a th:href="@{/register}">Register</a></li>
+        </ul>
+    </nav>
+    <hr />
+</header>
+
+<!-- Generic page layout fragment -->
+<div th:fragment="layout(content)">
+    <div th:insert="~{layout :: nav}"></div>
+
+    <main class="container">
+        <!-- Here each page will inject its own content -->
+        <div th:replace="${content}"></div>
+    </main>
+</div>
+
+</body>
+</html>

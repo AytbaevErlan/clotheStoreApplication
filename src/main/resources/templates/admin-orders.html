@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin - Orders</title>
+    <style>
+        body {
+            background: #0f1a2b;
+            color: #fff;
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        h1 {
+            color: #ffdd57;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            padding: 10px;
+            border-bottom: 1px solid #334;
+            text-align: left;
+        }
+        a {
+            color: #87cefa;
+        }
+        .no-data {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+
+<h1>Admin: All orders</h1>
+
+<div th:if="${#lists.isEmpty(orders)}" class="no-data">
+    <p>No orders yet.</p>
+</div>
+
+<table th:if="${!#lists.isEmpty(orders)}">
+    <tr>
+        <th>#</th>
+        <th>Buyer ID</th>
+        <th>Buyer email</th>
+        <th>Date</th>
+        <th>Status</th>
+        <th>Total</th>
+        <th></th>
+    </tr>
+    <tr th:each="order : ${orders}">
+        <td th:text="${order.id}"></td>
+        <td th:text="${order.buyer.id}"></td>
+        <td th:text="${order.buyer.email}"></td>
+        <td th:text="${order.createdAt}"></td>
+        <td th:text="${order.status}"></td>
+        <td th:text="${order.total}"></td>
+        <td><a th:href="@{'/admin/orders/' + ${order.id}}">Details</a></td>
+    </tr>
+</table>
+
+<p><a href="/products">← Back to products</a></p>
+
+</body>
+</html>

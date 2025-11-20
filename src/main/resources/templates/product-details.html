@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="${product.name}">Product details</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+    <style>
+
+        .product-detail-layout {
+            display: flex;
+            gap: 2rem;
+            align-items: flex-start;
+            margin-top: 2rem;
+        }
+
+        .product-detail-image-wrapper {
+            flex: 0 0 350px;
+        }
+
+        .product-detail-image {
+            width: 350px;
+            height: 350px;
+            object-fit: cover;
+            border-radius: 12px;
+            display: block;
+        }
+
+        @media (max-width: 768px) {
+            .product-detail-layout {
+                flex-direction: column;
+            }
+
+            .product-detail-image-wrapper {
+                flex: 0 0 auto;
+            }
+
+            .product-detail-image {
+                width: 100%;
+                max-width: 350px;
+                height: 350px;
+            }
+        }
+    </style>
+</head>
+<body>
+<header class="navbar">
+    <nav>
+        <a th:href="@{/products}">Products</a> |
+        <a th:href="@{/cart}">Cart</a> |
+        <a th:href="@{/orders}">Orders</a> |
+        <a th:href="@{/admin/products}">Admin products</a>
+    </nav>
+</header>
+
+<main class="container">
+    <a th:href="@{/products}">&larr; Back to products</a>
+
+    <div class="product-detail-layout">
+        <!-- IMAGE -->
+        <div class="product-detail-image-wrapper">
+            <img class="product-detail-image"
+                 th:src="${product.imageUrl} ?: @{/images/default-product.jpg}"
+                 alt="Product image">
+        </div>
+
+
+        <div>
+            <h1 th:text="${product.name}">Product name</h1>
+
+            <p>
+                Price:
+                <span th:text="${#numbers.formatDecimal(product.price, 1, '2', 'POINT')}">0.00</span>
+            </p>
+
+            <p>
+                Category:
+                <span th:text="${product.category != null ? product.category.name : 'Uncategorized'}">
+                    Category
+                </span>
+                &middot;
+                SKU:
+                <span th:text="${product.sku}">SKU</span>
+                &middot;
+                In stock:
+                <span th:text="${product.stock}">0</span>
+            </p>
+
+            <p th:text="${product.description}">Description...</p>
+
+            <div class="product-actions">
+                <!-- Add to cart form -->
+                <form th:action="@{'/cart/add/' + ${product.id}}" method="post" style="display:inline;">
+                    <button type="submit">Add to cart</button>
+                </form>
+
+                <!-- Go to cart -->
+                <a th:href="@{/cart}">Go to cart</a>
+            </div>
+        </div>
+    </div>
+</main>
+</body>
+</html>

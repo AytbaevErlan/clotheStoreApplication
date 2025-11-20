@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Your Cart</title>
+    <style>
+        body {
+            background: #0f1a2b;
+            color: #fff;
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        h1 {
+            color: #87cefa;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            padding: 10px;
+            border-bottom: 1px solid #334;
+            text-align: left;
+        }
+        a {
+            color: #87cefa;
+        }
+        input[type="number"] {
+            width: 60px;
+            padding: 4px;
+            border-radius: 4px;
+            border: 1px solid #555;
+            background: #1b2740;
+            color: #fff;
+        }
+        button {
+            padding: 6px 12px;
+            border-radius: 4px;
+            border: 1px solid #555;
+            background: #1b2740;
+            color: #fff;
+            cursor: pointer;
+        }
+        .actions {
+            display: flex;
+            gap: 8px;
+        }
+        .summary {
+            margin-top: 20px;
+            font-size: 1.1rem;
+        }
+        .flash-message {
+            margin-top: 10px;
+            color: #7CFC00;
+        }
+        .top-links {
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="top-links">
+    <a href="/products">Products</a> |
+    <a href="/orders">Orders</a>
+</div>
+
+<h1>Your cart</h1>
+
+<p th:if="${message}" class="flash-message" th:text="${message}"></p>
+
+<div th:if="${cart == null or cart.items == null or #lists.isEmpty(cart.items)}">
+    <p>Your cart is empty.</p>
+    <p><a href="/products">← Back to products</a></p>
+</div>
+
+<div th:if="${cart != null and !#lists.isEmpty(cart.items)}">
+    <table>
+        <tr>
+            <th>Product</th>
+            <th>Quantity</th>
+            <th>Unit price</th>
+            <th>Line total</th>
+            <th>Actions</th>
+        </tr>
+
+        <tr th:each="item : ${cart.items}">
+            <td th:text="${item.productName}"></td>
+
+            <td>
+                <!-- quantity update form -->
+                <form th:action="@{/cart/update}" method="post">
+                    <input type="hidden" name="productId" th:value="${item.productId}"/>
+                    <input type="number" name="quantity"
+                           min="1"
+                           th:value="${item.quantity}"/>
+                    <button type="submit">Update</button>
+                </form>
+            </td>
+
+            <td th:text="${item.unitPrice}"></td>
+            <td th:text="${item.lineTotal}"></td>
+
+            <td class="actions">
+                <!-- remove item form -->
+                <form th:action="@{/cart/remove}" method="post">
+                    <input type="hidden" name="productId" th:value="${item.productId}"/>
+                    <button type="submit">Remove</button>
+                </form>
+            </td>
+        </tr>
+    </table>
+
+    <div class="summary">
+        <p><strong>Total:</strong> <span th:text="${cart.total}"></span></p>
+    </div>
+
+    <p>
+        <a href="/products">← Continue shopping</a>
+        &nbsp;|&nbsp;
+        <a href="/checkout">Proceed to checkout →</a>
+    </p>
+</div>
+
+</body>
+</html>

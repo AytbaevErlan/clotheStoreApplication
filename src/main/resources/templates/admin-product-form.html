@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="${formTitle}">Admin - Product</title>
+    <style>
+        body {
+            background: #0f1a2b;
+            color: #fff;
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        h1 {
+            color: #ffdd57;
+        }
+        label {
+            display: block;
+            margin-top: 10px;
+        }
+        input[type="text"],
+        input[type="number"],
+        textarea,
+        select {
+            width: 300px;
+            max-width: 100%;
+            padding: 6px;
+            border-radius: 4px;
+            border: 1px solid #555;
+            background: #1b2740;
+            color: #fff;
+        }
+        textarea {
+            height: 80px;
+        }
+        button {
+            margin-top: 15px;
+            padding: 8px 16px;
+            border-radius: 4px;
+            border: 1px solid #555;
+            background: #1b2740;
+            color: #fff;
+            cursor: pointer;
+        }
+        a {
+            color: #87cefa;
+        }
+        .top-links {
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="top-links">
+    <a href="/admin/products">Admin products</a> |
+    <a href="/products">Store</a>
+</div>
+
+<h1 th:text="${formTitle}">Product</h1>
+
+<!-- CREATE FORM (no id yet) -->
+<div th:if="${product.id == null}">
+    <form th:action="@{/admin/products}"
+          method="post"
+          th:object="${product}">
+
+        <label>Name:
+            <input type="text" th:field="*{name}" required/>
+        </label>
+
+        <label>Description:
+            <textarea th:field="*{description}"></textarea>
+        </label>
+
+        <label>Price:
+            <input type="number"
+                   th:field="*{price}"
+                   step="0.01"
+                   min="0"/>
+        </label>
+
+        <label>SKU:
+            <input type="text" th:field="*{sku}"/>
+        </label>
+
+        <label>Stock:
+            <input type="number"
+                   th:field="*{stock}"
+                   min="0"/>
+        </label>
+
+        <label>Image URL:
+            <input type="text" th:field="*{imageUrl}"/>
+        </label>
+
+        <label>Category:
+            <select name="categoryId" required>
+                <option value="" disabled
+                        th:selected="${product.category == null}">
+                    -- select category --
+                </option>
+                <option th:each="c : ${categories}"
+                        th:value="${c.id}"
+                        th:text="${c.name}">
+                </option>
+            </select>
+        </label>
+
+        <label>
+            <input type="checkbox" th:field="*{active}"/>
+            Active
+        </label>
+
+        <button type="submit">Create</button>
+    </form>
+</div>
+
+<!-- EDIT FORM (existing product with id) -->
+<div th:if="${product.id != null}">
+    <form th:action="@{'/admin/products/' + ${product.id}}"
+          method="post"
+          th:object="${product}">
+
+        <label>Name:
+            <input type="text" th:field="*{name}" required/>
+        </label>
+
+        <label>Description:
+            <textarea th:field="*{description}"></textarea>
+        </label>
+
+        <label>Price:
+            <input type="number"
+                   th:field="*{price}"
+                   step="0.01"
+                   min="0"/>
+        </label>
+
+        <label>SKU:
+            <input type="text" th:field="*{sku}"/>
+        </label>
+
+        <label>Stock:
+            <input type="number"
+                   th:field="*{stock}"
+                   min="0"/>
+        </label>
+
+        <label>Image URL:
+            <input type="text" th:field="*{imageUrl}"/>
+        </label>
+
+        <label>Category:
+            <select name="categoryId" required>
+                <option value="" disabled
+                        th:selected="${product.category == null}">
+                    -- select category --
+                </option>
+                <option th:each="c : ${categories}"
+                        th:value="${c.id}"
+                        th:text="${c.name}"
+                        th:selected="${product.category != null and c.id == product.category.id}">
+                </option>
+            </select>
+        </label>
+
+        <label>
+            <input type="checkbox" th:field="*{active}"/>
+            Active
+        </label>
+
+        <button type="submit">Update</button>
+    </form>
+</div>
+
+<p><a href="/admin/products">← Back to products list</a></p>
+
+</body>
+</html>
