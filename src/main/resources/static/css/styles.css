@@ -52,7 +52,7 @@ button:hover {
 }
 
 .product-card {
-    width: 280px;                /* fixed card width */
+    width: 280px;                
     background: #0e1a2b;
     padding: 16px;
     border-radius: 10px;
@@ -61,9 +61,9 @@ button:hover {
 }
 
 .product-image {
-    width: 100%;                 /* fits the card */
-    height: 250px;               /* fixed square-ish */
-    object-fit: cover;           /* crop image to fit */
+    width: 100%;                
+    height: 250px;          
+    object-fit: cover;     
     border-radius: 10px;
     background-color: #111;
 }
