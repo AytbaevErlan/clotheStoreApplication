@@ -9,11 +9,6 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
 
-/**
- * Temporary no-op JWT filter.
- * It does nothing except pass the request down the chain.
- * Good enough while you just want the site to work.
- */
 @Component
 public class JwtAuthFilter extends OncePerRequestFilter {
 
